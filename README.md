@@ -295,6 +295,31 @@ import {delay} from "/animateplus.js";
 delay(500).then(time => console.log(`${time}ms elapsed`));
 ```
 
+### pause and resume
+#### pause
+just like the stop API, but return pause object for resume
+#### resume
+resume an paused animation
+
+```javascript
+import { pause, resume } from './animateplus.js';
+animate({
+  elements: "span",
+  easing: "linear",
+  duration: index => 8000 + index * 200,
+  loop: true,
+  transform: ["rotate(0deg)", 360]
+});
+document.addEventListener("click", ({target}) => {
+  if (target.paused) {
+    resume(target.paused);
+    target.paused = null;
+  } else {
+    target.paused = pause(target);
+  }
+});
+```
+
 ## Browser support
 
 Animate Plus is provided as a native ES2015 module, which means you may need to transpile it
