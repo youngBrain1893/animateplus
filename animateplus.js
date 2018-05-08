@@ -434,3 +434,32 @@ export const stop = elements => {
   });
   return nodes;
 };
+
+export const pause = elements => {
+  const { all } = rAF;
+  const nodes = getElements(elements);
+  const paused = {
+    all: new Set(),
+    time: performance.now()
+  };
+  all.forEach(object => {
+    if (nodes.includes(object.element)) {
+      all.delete(object);
+      paused.all.add(object);
+    }
+  })
+  return paused;
+}
+
+export const resume = (paused = {}) => {
+  const { all, time } = paused;
+  if (!all) return;
+  const now = performance.now();
+  const elapsed = now - time;
+  requestAnimationFrame(() => {
+    all.forEach(object => {
+      object.startTime += elapsed;
+      rAF.add(object);
+    })
+  })
+}
